@@ -59,12 +59,28 @@ function playGame() {
   let computerScore = 0;
   let humanScore = 0;
 
-  let roundsPlayed = 0;
+  let menu = document.querySelector('#menu');
+  let scoreboard = document.querySelector('#scoreboard');
+  let lastRound = document.querySelector('#last-round');
+  let winner = document.querySelector('#winner');
 
-  for (let i=0; i < 5; i++) {
-    console.log(playRound(getComputerChoice(), getHumanChoice()));
-  }
-  console.log(determineWinner());
+  menu.addEventListener('click', (event) => {
+    let target = event.target;
+
+    lastRound.textContent = playRound(getComputerChoice(), target.id);
+    scoreboard.textContent = `Human: ${humanScore} Bot: ${computerScore}`;
+    if (computerScore == 5) winner.textContent = 'Bot wins. Resetting game.';
+    if (humanScore == 5) winner.textContent = 'Human wins! Resetting game.';
+    if (computerScore == 5 || humanScore == 5) {
+      setTimeout(() => {
+        computerScore = 0;
+        humanScore = 0;
+	winner.textContent = '';
+        lastRound.textContent = '';
+        scoreboard.textContent = 'Click your choice to start a game!';
+      }, 5000);  // Game resets after 5 seconds
+    } 
+  });
 }
 
 playGame();
